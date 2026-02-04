@@ -7,8 +7,13 @@ export default function Main() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
+        // Создаём AbortController для отмены запроса
+        const abortController = new AbortController();
+
         // Запрос к PHP API
-        fetch('/api/articles')
+        fetch('/api/articles', {
+            signal: abortController.signal
+        })
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Ошибка при загрузке статей');
@@ -20,9 +25,17 @@ export default function Main() {
                 setLoading(false);
             })
             .catch(err => {
-                setError(err.message);
-                setLoading(false);
+                // Игнорируем ошибку отмены запроса
+                if (err.name !== 'AbortError') {
+                    setError(err.message);
+                    setLoading(false);
+                }
             });
+
+        // Cleanup функция: отменяем запрос при размонтировании
+        return () => {
+            abortController.abort();
+        };
     }, []); // Пустой массив зависимостей - запрос выполнится один раз при монтировании
 
     return (
