@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import ArticleCard from './components/ArticleCard';
 
 export default function Main() {
     const [articles, setArticles] = useState([]);
@@ -51,13 +52,7 @@ export default function Main() {
                     <div className="flex flex-col gap-4 mt-8">
                         <h2 className="text-2xl font-semibold text-emerald-300">Статьи</h2>
                         {articles.map(article => (
-                            <div key={article.id} className="rounded-lg bg-slate-900 border border-slate-800 p-6">
-                                <h3 className="text-xl font-semibold mb-2">{article.title}</h3>
-                                <p className="text-slate-400">{article.content}</p>
-                                <p className="text-sm text-slate-500 mt-2">
-                                    {new Date(article.created_at).toLocaleDateString('ru-RU')}
-                                </p>
-                            </div>
+                            <ArticleCard key={article.id} article={article} />
                         ))}
                     </div>
                 )}
