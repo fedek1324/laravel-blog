@@ -22,18 +22,19 @@ cd laravel-blog/
 
 При запущенном Docker Desktop:
 
+1. Скачать нужные образы, создать и запустить контейнер (может занять до 15 минут)
 ```bash
-# 1. Создать и запустить контейнер
 docker-compose up -d
+```
 
-# 2. Установить npm зависимости внутри контейнера
+2. Установить npm зависимости внутри контейнера
+```bash
 docker-compose exec -T app npm install
+```
 
-# 3. Собрать фронтенд (создал build файлы)
+3. Собрать фронтенд (создал build файлы)
+```bash
 docker-compose exec -T app npm run build
-
-# 4. Проверить что файлы создались (опционально)
-docker-compose exec -T app ls -la public/build/
 ```
 
 Эта команда запустит 3 контейнера:
@@ -44,15 +45,18 @@ docker-compose exec -T app ls -la public/build/
 
 ### 3. Запуск миграций и заполнение БД
 
-```bash
-# Запуск миграций (создание таблиц)
-docker-compose exec app php artisan migrate
 
-# Заполнение БД тестовыми данными (5 статей с 3 комментариями каждая)
+Запуск миграций (создание таблиц)
+```bash
+docker-compose exec app php artisan migrate
+```
+
+Заполнение БД тестовыми данными (5 статей с 3 комментариями каждая)
+```bash
 docker-compose exec app php artisan db:seed
 ```
 
-Или выполните всё за один раз (пересоздание БД с нуля):
+Или выполнить всё за один раз (пересоздание БД с нуля):
 
 ```bash
 docker-compose exec app php artisan migrate:fresh --seed
@@ -66,4 +70,4 @@ docker-compose exec app php artisan migrate:fresh --seed
 http://localhost:8080
 ```
 
-Если nginx показывает ошибку 502 то нужно подождать до 30 минут пока Docker соберёт все контейнеры. Отслеживать можно по логу контейнера dockerized-laravel-app.
+Если nginx показывает ошибку 502 то нужно подождать до 20 минут пока Docker соберёт все контейнеры. Отслеживать можно по логу контейнера dockerized-laravel-app.
