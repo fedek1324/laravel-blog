@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import ArticleCard from './components/ArticleCard';
+import { getArticles } from './api/articlesApi';
 
 export default function Main() {
     const [articles, setArticles] = useState([]);
@@ -7,19 +8,9 @@ export default function Main() {
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        // Создаём AbortController для отмены запроса
         const abortController = new AbortController();
 
-        // Запрос к PHP API
-        fetch('/api/articles', {
-            signal: abortController.signal
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Ошибка при загрузке статей');
-                }
-                return response.json();
-            })
+        getArticles(abortController.signal)
             .then(data => {
                 setArticles(data);
                 setLoading(false);
@@ -32,11 +23,10 @@ export default function Main() {
                 }
             });
 
-        // Cleanup функция: отменяем запрос при размонтировании
         return () => {
             abortController.abort();
         };
-    }, []); // Пустой массив зависимостей - запрос выполнится один раз при монтировании
+    }, []);
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -48,19 +38,16 @@ export default function Main() {
                     React установлен и готов к работе
                 </h1>
 
-                {/* Отображение состояния загрузки */}
                 {loading && (
                     <p className="text-slate-400">Загрузка статей...</p>
                 )}
 
-                {/* Отображение ошибки */}
                 {error && (
                     <div className="rounded-lg bg-red-900/20 border border-red-500 p-4">
                         <p className="text-red-400">Ошибка: {error}</p>
                     </div>
                 )}
 
-                {/* Отображение статей */}
                 {!loading && !error && articles.length > 0 && (
                     <div className="flex flex-col gap-4 mt-8">
                         <h2 className="text-2xl font-semibold text-emerald-300">Статьи</h2>
@@ -70,7 +57,6 @@ export default function Main() {
                     </div>
                 )}
 
-                {/* Если статей нет */}
                 {!loading && !error && articles.length === 0 && (
                     <p className="text-slate-400">Статей пока нет</p>
                 )}
