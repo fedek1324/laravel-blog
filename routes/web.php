@@ -3,11 +3,6 @@
 use App\Http\Controllers\ArticleController;
 use Illuminate\Support\Facades\Route;
 
-// Главная страница приложения
-Route::get('/', function () {
-    return view('welcome');
-});
-
 // API маршруты для работы со статьями
 Route::prefix('api')->group(function () {
     Route::get('/articles', [ArticleController::class, 'index']); // Получить список всех статей
@@ -16,3 +11,8 @@ Route::prefix('api')->group(function () {
     Route::put('/articles/{id}', [ArticleController::class, 'update']); // Обновить статью
     Route::delete('/articles/{id}', [ArticleController::class, 'destroy']); // Удалить статью
 });
+
+// Все остальные маршруты обрабатываются React Router
+Route::get('/{any}', function () {
+    return view('welcome');
+})->where('any', '.*');
