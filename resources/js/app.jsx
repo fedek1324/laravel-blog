@@ -1,4 +1,3 @@
-import './bootstrap';
 import { createRoot } from 'react-dom/client';
 import Main from './Main';
 
