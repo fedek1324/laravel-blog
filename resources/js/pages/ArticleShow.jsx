@@ -1,12 +1,20 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getArticle } from '../api/articlesApi';
+import CommentForm from '../components/CommentForm';
 
 export default function ArticleShow() {
     const { id } = useParams();
     const [article, setArticle] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+
+    const handleCommentAdded = (newComment) => {
+        setArticle(prev => ({
+            ...prev,
+            comments: [...(prev.comments || []), newComment],
+        }));
+    };
 
     useEffect(() => {
         const abortController = new AbortController();
@@ -88,6 +96,10 @@ export default function ArticleShow() {
                         </div>
                     </div>
                 )}
+
+                <hr className="my-8 border-slate-800" />
+
+                <CommentForm articleId={id} onCommentAdded={handleCommentAdded} />
             </div>
         </div>
     );

@@ -102,3 +102,29 @@ export const deleteArticle = async (id, signal) => {
 
     return response.json();
 };
+
+/**
+ * Добавить комментарий к статье
+ * @param {number|string} articleId - ID статьи
+ * @param {Object} data - данные комментария
+ * @param {string} data.author_name - имя автора
+ * @param {string} data.content - текст комментария
+ * @param {AbortSignal} signal - сигнал для отмены запроса
+ * @returns {Promise<Object>}
+ */
+export const createComment = async (articleId, data, signal) => {
+    const response = await fetch(`${API_BASE_URL}/articles/${articleId}/comments`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+        signal,
+    });
+
+    if (!response.ok) {
+        throw new Error('Ошибка при добавлении комментария');
+    }
+
+    return response.json();
+};
