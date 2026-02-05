@@ -65,3 +65,5 @@ docker-compose exec app php artisan migrate:fresh --seed
 ```
 http://localhost:8080
 ```
+
+Если nginx показывает ошибку 502 то нужно подождать до 30 минут пока Docker соберёт все контейнеры. Отслеживать можно по логу контейнера dockerized-laravel-app.
