@@ -15,11 +15,13 @@
 ### 1. Клонирование репозитория
 
 ```bash
-git clone <repository-url>
-cd laraverTask
+git clone https://github.com/fedek1324/laravel-blog
+cd laravel-blog/
 ```
 
 ### 2. Запуск Docker контейнеров
+
+При запущенном Docker Desktop:
 
 ```bash
 docker-compose up -d
@@ -29,6 +31,12 @@ docker-compose up -d
 - `dockerized-laravel-app` - PHP приложение Laravel
 - `dockerized-laravel-webserver` - Nginx веб-сервер
 - `dockerized-laravel-db` - MySQL база данных
+
+### 3. Запуск фронтенда
+
+```bash
+docker-compose up -d
+```
 
 ### 3. Запуск миграций и заполнение БД
 
