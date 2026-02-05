@@ -45,7 +45,14 @@ if [ -f /var/www/html/vendor/autoload.php ]; then
           sleep 5
         done
 
-        php artisan migrate --force
+        # Проверяем, есть ли уже таблица migrations в базе данных
+        if php artisan migrate:status --no-ansi 2>&1 | grep -q "Migration table not found"; then
+            echo "База данных пустая. Выполняем миграции и заполнение тестовыми данными..."
+            php artisan migrate:fresh --seed --force
+        else
+            echo "База данных уже содержит таблицы. Выполняем только новые миграции..."
+            php artisan migrate --force
+        fi
     fi
 fi
 
