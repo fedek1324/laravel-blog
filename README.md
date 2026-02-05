@@ -7,7 +7,6 @@
 Перед установкой убедитесь, что у вас установлены:
 - [Docker](https://www.docker.com/get-started) (версия 20.10+)
 - [Docker Compose](https://docs.docker.com/compose/install/) (версия 2.0+)
-- [Node js](https://nodejs.org/en)  (версия 24 LTS)
 - Git (опционально, для клонирования репозитория)
 
 ## Быстрый старт
@@ -24,7 +23,17 @@ cd laravel-blog/
 При запущенном Docker Desktop:
 
 ```bash
+# 1. Создать и запустить контейнер
 docker-compose up -d
+
+# 2. Установить npm зависимости внутри контейнера
+docker-compose exec -T app npm install
+
+# 3. Собрать фронтенд (создал build файлы)
+docker-compose exec -T app npm run build
+
+# 4. Проверить что файлы создались (опционально)
+docker-compose exec -T app ls -la public/build/
 ```
 
 Эта команда запустит 3 контейнера:
@@ -32,11 +41,6 @@ docker-compose up -d
 - `dockerized-laravel-webserver` - Nginx веб-сервер
 - `dockerized-laravel-db` - MySQL база данных
 
-### 3. Запуск фронтенда
-
-```bash
-docker-compose up -d
-```
 
 ### 3. Запуск миграций и заполнение БД
 
