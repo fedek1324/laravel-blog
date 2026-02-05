@@ -17,6 +17,18 @@ if [ ! -f /var/www/html/vendor/autoload.php ]; then
     composer install --no-interaction --prefer-dist --no-progress
 fi
 
+# Устанавливаем npm зависимости, если отсутствуют
+if [ ! -d /var/www/html/node_modules ]; then
+    echo "Установка npm зависимостей..."
+    npm install
+fi
+
+# Собираем фронтенд, если build файлы отсутствуют
+if [ ! -d /var/www/html/public/build ]; then
+    echo "Сборка фронтенда..."
+    npm run build
+fi
+
 # Запускаем Artisan команды только если зависимости установлены
 if [ -f /var/www/html/vendor/autoload.php ]; then
     # Генерируем ключ приложения, если он не установлен
