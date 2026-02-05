@@ -97,6 +97,13 @@ export default function ArticleShow() {
                     </div>
                 )}
 
+                {(!article.comments || article.comments.length === 0) && (
+                    <div className="mt-8">
+                        <h2 className="text-2xl font-semibold mb-4 text-emerald-300">Комментарии</h2>
+                        <p className="text-slate-400">Комментариев нет</p>
+                    </div>
+                )}
+
                 <hr className="my-8 border-slate-800" />
 
                 <CommentForm articleId={id} onCommentAdded={handleCommentAdded} />
