@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import ArticleCard from '../components/ArticleCard';
 import { getArticles } from '../api/articlesApi';
 
@@ -30,12 +31,17 @@ export default function ArticlesList() {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100">
             <div className="mx-auto flex max-w-3xl flex-col gap-4 px-6 py-16">
-                <p className="text-sm uppercase tracking-[0.3em] text-emerald-300">
-                    Laravel + React
-                </p>
-                <h1 className="text-4xl font-semibold">
-                    React установлен и готов к работе
-                </h1>
+                <div className="flex items-center justify-between gap-4">
+                    <h1 className="text-4xl font-semibold">
+                        Статьи
+                    </h1>
+                    <Link
+                        to="/articles/create"
+                        className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors font-medium whitespace-nowrap"
+                    >
+                        Создать статью
+                    </Link>
+                </div>
 
                 {loading && (
                     <p className="text-slate-400">Загрузка статей...</p>
