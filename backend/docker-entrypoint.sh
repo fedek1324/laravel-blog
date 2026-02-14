@@ -12,6 +12,11 @@ mkdir -p /var/www/html/bootstrap/cache
 chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Создаём .env из .env.example, если .env не существует
+if [ ! -f /var/www/html/.env ]; then
+    cp /var/www/html/.env.example /var/www/html/.env
+fi
+
 # Устанавливаем PHP зависимости, если отсутствуют
 if [ ! -f /var/www/html/vendor/autoload.php ]; then
     composer install --no-interaction --prefer-dist --no-progress
