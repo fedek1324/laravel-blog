@@ -14,8 +14,6 @@ RUN apt-get update && apt-get install -y \
     zip \
     unzip \
     libzip-dev \
-    nodejs \
-    npm \
     netcat-traditional
 
 # Очищаем кеш apt
@@ -34,9 +32,8 @@ RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 # Копируем файлы приложения
 COPY . /var/www/html
 
-# Устанавливаем зависимости и собираем фронтенд
+# Устанавливаем PHP зависимости
 RUN composer install --no-interaction --no-plugins --no-scripts
-RUN npm install && npm run build
 
 # Открываем порт PHP-FPM
 EXPOSE 9000

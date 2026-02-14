@@ -1,7 +1,11 @@
-import { useState } from 'react';
-import { createComment } from '../api/articlesApi';
+'use client';
 
-export default function CommentForm({ articleId, onCommentAdded }) {
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { createComment } from '@/lib/api';
+
+export default function CommentForm({ articleId }) {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         author_name: '',
         content: '',
@@ -14,18 +18,12 @@ export default function CommentForm({ articleId, onCommentAdded }) {
         setLoading(true);
         setError(null);
 
-        const abortController = new AbortController();
-
         try {
-            const newComment = await createComment(articleId, formData, abortController.signal);
+            await createComment(articleId, formData);
             setFormData({ author_name: '', content: '' });
-            if (onCommentAdded) {
-                onCommentAdded(newComment);
-            }
+            router.refresh();
         } catch (err) {
-            if (err.name !== 'AbortError') {
-                setError(err.message);
-            }
+            setError(err.message);
         } finally {
             setLoading(false);
         }

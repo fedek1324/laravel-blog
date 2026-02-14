@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import Link from 'next/link';
 
 export default function ArticleCard({ article }) {
     const truncateText = (text, maxLength = 150) => {
@@ -8,7 +8,7 @@ export default function ArticleCard({ article }) {
 
     return (
         <Link
-            to={`/articles/${article.id}`}
+            href={`/articles/${article.id}`}
             className="block rounded-lg bg-slate-900 border border-slate-800 p-6 hover:border-slate-700 transition-colors cursor-pointer"
         >
             <h3 className="text-xl font-semibold mb-2">{article.title}</h3>

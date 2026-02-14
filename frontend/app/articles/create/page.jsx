@@ -1,9 +1,12 @@
-import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { createArticle } from '../api/articlesApi';
+'use client';
 
-export default function ArticleCreate() {
-    const navigate = useNavigate();
+import { useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createArticle } from '@/lib/api';
+
+export default function ArticleCreatePage() {
+    const router = useRouter();
     const [formData, setFormData] = useState({
         title: '',
         content: '',
@@ -16,16 +19,12 @@ export default function ArticleCreate() {
         setLoading(true);
         setError(null);
 
-        const abortController = new AbortController();
-
         try {
-            await createArticle(formData, abortController.signal);
-            navigate('/');
+            await createArticle(formData);
+            router.push('/');
         } catch (err) {
-            if (err.name !== 'AbortError') {
-                setError(err.message);
-                setLoading(false);
-            }
+            setError(err.message);
+            setLoading(false);
         }
     };
 
@@ -40,8 +39,8 @@ export default function ArticleCreate() {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100">
             <div className="mx-auto max-w-3xl px-6 py-16">
-                <Link to="/" className="inline-block mb-6 text-emerald-400 hover:text-emerald-300">
-                    ← Вернуться к списку статей
+                <Link href="/" className="inline-block mb-6 text-emerald-400 hover:text-emerald-300">
+                    &larr; Вернуться к списку статей
                 </Link>
 
                 <h1 className="text-4xl font-semibold mb-8">Создать новую статью</h1>
@@ -95,8 +94,8 @@ export default function ArticleCreate() {
                             {loading ? 'Создание...' : 'Создать статью'}
                         </button>
                         <Link
-                            to="/"
-                            className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors font-medium"
+                            href="/"
+                            className="px-6 py-3 bg-slate-800 hover:bg-slate-700 text-white rounded-lg transition-colors font-medium inline-flex items-center"
                         >
                             Отмена
                         </Link>

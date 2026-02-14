@@ -1,7 +1,7 @@
 version: '3.8'
 
 services:
-  # PHP приложение Laravel
+  # PHP приложение Laravel (API)
   app:
     build:
       context: .
@@ -9,7 +9,6 @@ services:
     container_name: dockerized-laravel-app
     restart: unless-stopped
     volumes:
-      - ./:/var/www/html
       - ./docker/php/local.ini:/usr/local/etc/php/conf.d/local.ini
     networks:
       - dockerized-laravel-network
@@ -21,6 +20,21 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
 
+  # Next.js Frontend (SSR)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: dockerized-laravel-frontend
+    restart: unless-stopped
+    environment:
+      - INTERNAL_API_URL=http://webserver:8080/api
+      - NODE_OPTIONS=--dns-result-order=ipv4first
+    networks:
+      - dockerized-laravel-network
+    depends_on:
+      - app
+
   # Веб-сервер Nginx
   webserver:
     image: nginx:alpine
@@ -29,13 +43,13 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./:/var/www/html
-      # Монтируем файл конфигурации напрямую
+      - ./public:/var/www/html/public:ro
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - dockerized-laravel-network
     depends_on:
       - app
+      - frontend
 
   # База данных MySQL
   db:

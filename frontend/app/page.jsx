@@ -1,32 +1,16 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import ArticleCard from '../components/ArticleCard';
-import { getArticles } from '../api/articlesApi';
+import Link from 'next/link';
+import ArticleCard from '@/components/ArticleCard';
+import { getArticles } from '@/lib/api';
 
-export default function ArticlesList() {
-    const [articles, setArticles] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+export default async function ArticlesListPage() {
+    let articles = [];
+    let error = null;
 
-    useEffect(() => {
-        const abortController = new AbortController();
-
-        getArticles(abortController.signal)
-            .then(data => {
-                setArticles(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                if (err.name !== 'AbortError') {
-                    setError(err.message);
-                    setLoading(false);
-                }
-            });
-
-        return () => {
-            abortController.abort();
-        };
-    }, []);
+    try {
+        articles = await getArticles();
+    } catch (err) {
+        error = err.message;
+    }
 
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100">
@@ -36,16 +20,12 @@ export default function ArticlesList() {
                         Статьи
                     </h1>
                     <Link
-                        to="/articles/create"
+                        href="/articles/create"
                         className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg transition-colors font-medium whitespace-nowrap"
                     >
                         Создать статью
                     </Link>
                 </div>
-
-                {loading && (
-                    <p className="text-slate-400">Загрузка статей...</p>
-                )}
 
                 {error && (
                     <div className="rounded-lg bg-red-900/20 border border-red-500 p-4">
@@ -53,7 +33,7 @@ export default function ArticlesList() {
                     </div>
                 )}
 
-                {!loading && !error && articles.length > 0 && (
+                {!error && articles.length > 0 && (
                     <div className="flex flex-col gap-4 mt-8">
                         <h2 className="text-2xl font-semibold text-emerald-300">Статьи</h2>
                         {articles.map(article => (
@@ -62,7 +42,7 @@ export default function ArticlesList() {
                     </div>
                 )}
 
-                {!loading && !error && articles.length === 0 && (
+                {!error && articles.length === 0 && (
                     <p className="text-slate-400">Статей пока нет</p>
                 )}
             </div>

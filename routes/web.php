@@ -15,8 +15,3 @@ Route::prefix('api')->group(function () {
     // Комментарии к статьям
     Route::post('/articles/{id}/comments', [CommentController::class, 'store']); // Добавить комментарий
 });
-
-// Все остальные маршруты обрабатываются React Router
-Route::get('/{any}', function () {
-    return view('welcome');
-})->where('any', '.*');

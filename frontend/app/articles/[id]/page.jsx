@@ -1,49 +1,16 @@
-import { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import { getArticle } from '../api/articlesApi';
-import CommentForm from '../components/CommentForm';
+import Link from 'next/link';
+import { getArticle } from '@/lib/api';
+import CommentForm from '@/components/CommentForm';
 
-export default function ArticleShow() {
-    const { id } = useParams();
-    const [article, setArticle] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState(null);
+export default async function ArticleShowPage({ params }) {
+    const { id } = await params;
+    let article = null;
+    let error = null;
 
-    const handleCommentAdded = (newComment) => {
-        setArticle(prev => ({
-            ...prev,
-            comments: [...(prev.comments || []), newComment],
-        }));
-    };
-
-    useEffect(() => {
-        const abortController = new AbortController();
-
-        getArticle(id, abortController.signal)
-            .then(data => {
-                setArticle(data);
-                setLoading(false);
-            })
-            .catch(err => {
-                if (err.name !== 'AbortError') {
-                    setError(err.message);
-                    setLoading(false);
-                }
-            });
-
-        return () => {
-            abortController.abort();
-        };
-    }, [id]);
-
-    if (loading) {
-        return (
-            <div className="min-h-screen bg-slate-950 text-slate-100">
-                <div className="mx-auto max-w-3xl px-6 py-16">
-                    <p className="text-slate-400">Загрузка статьи...</p>
-                </div>
-            </div>
-        );
+    try {
+        article = await getArticle(id);
+    } catch (err) {
+        error = err.message;
     }
 
     if (error) {
@@ -53,8 +20,8 @@ export default function ArticleShow() {
                     <div className="rounded-lg bg-red-900/20 border border-red-500 p-4">
                         <p className="text-red-400">Ошибка: {error}</p>
                     </div>
-                    <Link to="/" className="mt-4 inline-block text-emerald-400 hover:text-emerald-300">
-                        ← Вернуться к списку статей
+                    <Link href="/" className="mt-4 inline-block text-emerald-400 hover:text-emerald-300">
+                        &larr; Вернуться к списку статей
                     </Link>
                 </div>
             </div>
@@ -64,8 +31,8 @@ export default function ArticleShow() {
     return (
         <div className="min-h-screen bg-slate-950 text-slate-100">
             <div className="mx-auto max-w-3xl px-6 py-16">
-                <Link to="/" className="inline-block mb-6 text-emerald-400 hover:text-emerald-300">
-                    ← Вернуться к списку статей
+                <Link href="/" className="inline-block mb-6 text-emerald-400 hover:text-emerald-300">
+                    &larr; Вернуться к списку статей
                 </Link>
 
                 <article className="rounded-lg bg-slate-900 border border-slate-800 p-8">
@@ -106,7 +73,7 @@ export default function ArticleShow() {
 
                 <hr className="my-8 border-slate-800" />
 
-                <CommentForm articleId={id} onCommentAdded={handleCommentAdded} />
+                <CommentForm articleId={id} />
             </div>
         </div>
     );

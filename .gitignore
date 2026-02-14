@@ -18,5 +18,10 @@ yarn-error.log
 /.nova
 /.vscode
 /.zed
+# Next.js
+frontend/.next/
+frontend/node_modules/
+frontend/.env*.local
+
 .claude
 CLAUDE.md
