@@ -26,8 +26,9 @@ cd laravel-blog/
 docker-compose up -d
 ```
 
-Эта команда запустит 3 контейнера:
-- `dockerized-laravel-app` - PHP приложение Laravel
+Эта команда запустит 4 контейнера:
+- `dockerized-laravel-app` - PHP приложение Laravel (API)
+- `dockerized-laravel-frontend` - Next.js фронтенд (SSR)
 - `dockerized-laravel-webserver` - Nginx веб-сервер
 - `dockerized-laravel-db` - MySQL база данных
 
