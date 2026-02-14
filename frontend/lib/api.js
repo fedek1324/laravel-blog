@@ -5,34 +5,49 @@ function getBaseUrl() {
     return typeof window === 'undefined' ? SERVER_API_BASE : CLIENT_API_BASE;
 }
 
-export async function getArticles() {
-    const res = await fetch(`${getBaseUrl()}/articles`, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Ошибка при загрузке статей');
+const JSON_HEADERS = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+};
+
+async function handleResponse(res, errorMsg) {
+    if (!res.ok) {
+        const body = await res.json().catch(() => null);
+        throw new Error(body?.message || errorMsg);
+    }
     return res.json();
 }
 
+export async function getArticles() {
+    const res = await fetch(`${getBaseUrl()}/articles`, {
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-store',
+    });
+    return handleResponse(res, 'Ошибка при загрузке статей');
+}
+
 export async function getArticle(id) {
-    const res = await fetch(`${getBaseUrl()}/articles/${id}`, { cache: 'no-store' });
-    if (!res.ok) throw new Error('Ошибка при загрузке статьи');
-    return res.json();
+    const res = await fetch(`${getBaseUrl()}/articles/${id}`, {
+        headers: { 'Accept': 'application/json' },
+        cache: 'no-store',
+    });
+    return handleResponse(res, 'Ошибка при загрузке статьи');
 }
 
 export async function createArticle(data) {
     const res = await fetch(`${getBaseUrl()}/articles`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: JSON_HEADERS,
         body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Ошибка при создании статьи');
-    return res.json();
+    return handleResponse(res, 'Ошибка при создании статьи');
 }
 
 export async function createComment(articleId, data) {
     const res = await fetch(`${getBaseUrl()}/articles/${articleId}/comments`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: JSON_HEADERS,
         body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Ошибка при добавлении комментария');
-    return res.json();
+    return handleResponse(res, 'Ошибка при добавлении комментария');
 }

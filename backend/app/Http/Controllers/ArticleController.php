@@ -47,7 +47,7 @@ class ArticleController extends Controller
     public function show(string $id)
     {
         // Загружаем статью вместе с комментариями (eager loading)
-        $article = Article::with('comments')->findOrFail($id);
+        $article = Article::with(['comments' => fn($q) => $q->orderBy('created_at', 'desc')])->findOrFail($id);
         return response()->json($article);
     }
 
