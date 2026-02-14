@@ -4,7 +4,7 @@ services:
   # PHP приложение Laravel (API)
   app:
     build:
-      context: .
+      context: ./backend
       dockerfile: Dockerfile
     container_name: dockerized-laravel-app
     restart: unless-stopped
@@ -43,7 +43,7 @@ services:
     ports:
       - "8080:8080"
     volumes:
-      - ./public:/var/www/html/public:ro
+      - ./backend/public:/var/www/html/public:ro
       - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
     networks:
       - dockerized-laravel-network

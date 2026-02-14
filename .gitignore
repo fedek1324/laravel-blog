@@ -1,11 +1,27 @@
-/.phpunit.cache
-/node_modules
-/public/build
-/public/hot
-/public/storage
-/storage/*.key
-/storage/pail
-/vendor
+# Backend (Laravel)
+backend/.phpunit.cache
+backend/node_modules
+backend/public/build
+backend/public/hot
+backend/public/storage
+backend/storage/*.key
+backend/storage/pail
+backend/vendor
+backend/.env
+
+# Frontend (Next.js)
+frontend/.next/
+frontend/node_modules/
+frontend/.env*.local
+
+# IDE
+/.fleet
+/.idea
+/.nova
+/.vscode
+/.zed
+
+# Misc
 .phpactor.json
 .phpunit.result.cache
 Homestead.json
@@ -13,15 +29,5 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 /auth.json
-/.fleet
-/.idea
-/.nova
-/.vscode
-/.zed
-# Next.js
-frontend/.next/
-frontend/node_modules/
-frontend/.env*.local
-
 .claude
 CLAUDE.md
